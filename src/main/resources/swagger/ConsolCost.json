@@ -1,0 +1,79 @@
+{
+  "UniversalShipment": {
+    "Shipment": {
+      "DataContext": {
+        "DataTargetCollection": {
+          "DataTarget": [
+            {
+              "Type": "ForwardingConsol",
+              "Key": ""
+            }
+          ]
+        },
+        "Company": {
+          "Code": "SH1"
+        }
+      },
+      "ConsolCosts": {
+        "ConsolCostLineCollection": {
+          "ConsolCostLine": [
+            {
+              "ImportMetaData": {
+                "Instruction": "Insert"
+              },
+              "ApportionmentMethod": "GVT",
+              "ApportionToSubShipments": false,
+              "PrepaidCollectFilter": "ALL",
+              "ChargeCode": {
+                "Code": "FRT"
+              },
+              "ChargeCodeGroup": {
+                "Code": "FRT"
+              },
+              "Creditor": {
+                "Type": "Organization",
+                "Key": "CMACGMORF"
+              },
+              "CostOSCurrency": {
+                "Code": "USD"
+              },
+              "CostOSAmount": "600.00",
+              "CostLocalAmount": "600.00",
+              "CostExchangeRate": "1.000000",
+              "CostInvoiceDate": "2022-10-21T00:00:00",
+              "CostAPInvoiceNumber": "APINV000151",
+              "SupplierReference": "SupRef00034"
+            },
+            {
+              "ImportMetaData": {
+                "Instruction": "Insert"
+              },
+              "ApportionmentMethod": "GVT",
+              "ApportionToSubShipments": false,
+              "PrepaidCollectFilter": "ALL",
+              "ChargeCode": {
+                "Code": "OBKG"
+              },
+              "ChargeCodeGroup": {
+                "Code": "ORG"
+              },
+              "Creditor": {
+                "Type": "Organization",
+                "Key": "CMACGMORF"
+              },
+              "CostOSCurrency": {
+                "Code": "USD"
+              },
+              "CostOSAmount": "150.00",
+              "CostLocalAmount": "150.00",
+              "CostExchangeRate": "1.000000",
+              "CostInvoiceDate": "2022-10-21T00:00:00",
+              "CostAPInvoiceNumber": "APINV000151",
+              "SupplierReference": "SupRef00034"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
