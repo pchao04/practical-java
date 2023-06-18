@@ -2,12 +2,17 @@ package com.course.practicaljava;
 
 
 import com.course.practicaljava.common.OpenApiConfig;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.info.Info;
+import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
+import java.io.IOException;
 
 @SpringBootApplication
 public class PracticalJavaApplication {
@@ -41,19 +46,42 @@ public class PracticalJavaApplication {
 	GroupedOpenApi b2b_server() {
 		return GroupedOpenApi.builder()
 				.group("b2b_server")
-				.addOpenApiCustomizer(openApi -> {
+				.addOpenApiCustomizer(customerGlobalHeaderOpenApiCustomizer())
 
 
-					openApi.info(new Info()
+
+				. pathsToMatch("/**/edi/**")
+				.build();
+	}
+
+	@Bean
+	public OpenApiCustomizer customerGlobalHeaderOpenApiCustomizer() {
+		return openApi-> {
+			try {
+				OpenApiConfig.OpenApiExamples openApiExamples = new OpenApiConfig().customerGlobalHeaderOpenApiCustomizer2();
+				openApiExamples.forEach(openApi.getComponents()::addExamples);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+
+			openApi.info(new Info()
 						.title("Electronic Data Interchange - ANSI X.12")
 						.version("1.0")
 						.description("Electronic Data Interchange (EDI) is the computer-to-computer exchange of business documents in a standard electronic format between business partners.")
 
-					);
-				})
+				);
+
+//			var a = new OpenApiConfig();
+//
+//			try {
+//				a.customerGlobalHeaderOpenApiCustomizer2();
+//			} catch (IOException e) {
+//				throw new RuntimeException(e);
+//			}
+//
+//			a.openAPI();
+			};
 
 
-				.pathsToMatch("/**/edi/**")
-				.build();
 	}
 }

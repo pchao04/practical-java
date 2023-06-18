@@ -1,7 +1,8 @@
 package com.course.practicaljava.controller.b2b;
 
+import com.course.practicaljava.model.response.ResponseModel;
+import com.course.practicaljava.service.ParntnerConfigService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,6 +26,11 @@ import org.springframework.web.bind.annotation.*;
             """)
 public class ManagementController {
 
+    private ParntnerConfigService parnerConfigService;
+
+    public ManagementController(ParntnerConfigService parnerConfigService) {
+        this.parnerConfigService = parnerConfigService;
+    }
     @GetMapping("/message_types")
     @Operation(
             summary = "B2B management get message types",description = "B2B management get message types",
@@ -101,7 +107,7 @@ public class ManagementController {
                                     value = "{\"status\":0 , \"data\": {}}"
                             )
                     }, mediaType = MediaType.APPLICATION_JSON_VALUE))})
-    public ResponseEntity<Object> getCustomers(
+    public ResponseEntity<Object> resend(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(examples = {
                     @ExampleObject(name = "result",
                             summary = "result",
@@ -109,12 +115,13 @@ public class ManagementController {
                             value =  customer ) }))
             Object data
     ) {
-        var entities = new Object();
+        var entities = parnerConfigService.findAll();
+        Object result = entities;
+        return new ResponseEntity<Object>(result, HttpStatus.OK);
 
-        return new ResponseEntity<Object>(entities, HttpStatus.OK);
     }
 
-    @PostMapping("/customers")
+    @PostMapping( path = "/customers",produces= MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             summary = "B2B management get customers",description = "B2B management get customers",
             responses = {
@@ -125,7 +132,7 @@ public class ManagementController {
                                     value = "{\"status\":0 , \"data\": {}}"
                             )
                     }, mediaType = MediaType.APPLICATION_JSON_VALUE))})
-    public ResponseEntity<Object> resend(
+    public ResponseEntity<ResponseModel> getCustomers(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(examples = {
                     @ExampleObject(name = "result",
                             summary = "result",
@@ -133,9 +140,12 @@ public class ManagementController {
                             value =  customer ) }))
             Object data
     ) {
-        var entities = new Object();
+        var entities = parnerConfigService.getCustomers();
+        ResponseModel result = new ResponseModel();
+        result.code=0;
+        result.data = entities;
+        return new ResponseEntity<ResponseModel>(result, HttpStatus.OK);
 
-        return new ResponseEntity<Object>(entities, HttpStatus.OK);
     }
 
     @PostMapping("/action")

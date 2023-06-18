@@ -17,9 +17,12 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import lombok.SneakyThrows;
 import org.springdoc.core.customizers.OpenApiCustomizer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -38,31 +41,50 @@ import java.util.function.BiConsumer;
 
 //@EnableWebMvc
 @Configuration
+
 public class OpenApiConfig  {
 
     @Bean
     ModelResolver modelResolver(ObjectMapper universalJsonMapper) {
-        return new ModelResolver(universalJsonMapper);
+        this.modelResolver= new  ModelResolver(universalJsonMapper);
+
+        return modelResolver;
     }
 
-    @Bean
-    public OpenAPI openAPI() {
-        return new OpenAPI()
-                .info(new Info()
-                        .title("EDI")
-                        .version("0.0.1")
-                );
-
-    }
-
-    @Bean
-    public OpenApiCustomizer customerGlobalHeaderOpenApiCustomizer(OpenApiExamples openApiExamples) {
-        return openApi -> {
-            // add components examples
-            openApiExamples.forEach(openApi.getComponents()::addExamples);
+    private ModelResolver modelResolver;
+   // @Bean
+//    public OpenAPI openAPI() {
+//        return new OpenAPI()
+//                .info(new Info()
+//                        .title("EDI")
+//                        .version("0.0.1")
+//                );
+//
+//    }
 
 
-        };
+//    @Bean
+
+
+
+    public OpenApiExamples openApiExamples;
+
+
+    public OpenApiExamples customerGlobalHeaderOpenApiCustomizer2() throws IOException {
+
+        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+
+        Resource[] resourceList = resolver.getResources("classpath:openapi/examples/*");
+
+        openApiExamples = new OpenApiExamples(resourceList);
+
+        return openApiExamples;
+//        return openApi -> {
+//            // add components examples
+//            openApiExamples.forEach(openApi.getComponents()::addExamples);
+
+
+//        };
     }
 
     @Bean
@@ -72,7 +94,7 @@ public class OpenApiConfig  {
         return new OpenApiExamples(resourceList);
     }
 
-    static class OpenApiExamples {
+    public static class OpenApiExamples {
 
         Map<String, Example> exampleMap = new HashMap<>();
 
@@ -87,7 +109,7 @@ public class OpenApiConfig  {
             }
         }
 
-        void forEach(BiConsumer<String, Example> biConsumer) {
+       public void forEach(BiConsumer<String, Example> biConsumer) {
             exampleMap.forEach(biConsumer);
         }
 

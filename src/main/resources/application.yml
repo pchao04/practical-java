@@ -23,7 +23,10 @@ springdoc:
   #    enabled=true:
 
 
-
+  elasticsearch:
+    uris: http://localhost:9200
+    #username: CustomerPortal
+    #password: Sit1qazxsw2
 
 management:
   metrics:
